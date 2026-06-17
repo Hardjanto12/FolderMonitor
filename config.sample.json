@@ -1,0 +1,55 @@
+{
+  "folderPath": "D:\\Image\\6201FS05",
+  "maxAgeMinutes": 30,
+  "checkIntervalSeconds": 60,
+  "repeatAlertMinutes": 5,
+  "includeSubfolders": true,
+  "scanMode": "date_folder",
+  "dateFolderPattern": "yyyy\\\\MMdd",
+  "scanLookbackDays": 3,
+  "allowedExtensions": [
+    ".jpg",
+    ".img"
+  ],
+  "ignoreExtensions": [
+    ".tmp",
+    ".part",
+    ".crdownload",
+    ".lock",
+    ".nul"
+  ],
+  "ignorePrefixes": [
+    "~$"
+  ],
+  "ignoreFileNames": [
+    "CREATEDIR.NUL"
+  ],
+  "alertMode": "popup_beep",
+  "recoveryAlertMode": "popup",
+  "alertBeepMode": "duration",
+  "alertBeepDurationSeconds": 30,
+  "alertBeepFrequencyHz": 1200,
+  "alertBeepToneMilliseconds": 200,
+  "alertBeepIntervalMilliseconds": 800,
+  "alertTitle": "Folder Monitor Alert",
+  "logPath": "logs/monitor.log",
+  "taskName": "FolderMonitor",
+  "autoInstallStartupOnRun": true,
+  "startupMode": "login",
+  "alertWhenFolderMissing": true,
+  "showRecoveryNotification": true,
+  "guiEnabled": true,
+  "minimizeToTray": true,
+  "startMinimizedToTray": false,
+  "quickSwitchMaxAgeMinutes": [
+    15,
+    20,
+    30
+  ],
+  "remoteAlertEnabled": false,
+  "remoteAlertUrl": "http://192.168.1.50:8765/api/alert",
+  "remoteAlertSecret": "change_this_secret",
+  "remoteAlertTimeoutSeconds": 3,
+  "remoteAlertSourceName": "XRay-PC-01",
+  "remoteAlertIncludeRecovery": false
+}

@@ -1,0 +1,9 @@
+Build Windows x64 GUI:
+
+cd source
+GOOS=windows GOARCH=amd64 go build -ldflags="-H windowsgui" -o ..\FolderMonitor.exe .
+
+Build Windows x64 console/headless debug:
+
+cd source
+GOOS=windows GOARCH=amd64 go build -o ..\FolderMonitor_console_debug.exe .

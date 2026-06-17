@@ -1,0 +1,72 @@
+2026/06/05 18:42:54 FolderMonitor v1.3.6 started. Config=C:\Users\Administrator\Downloads\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:42:54 Default config.json created. Please edit folderPath if needed.
+2026/06/05 18:42:54 Monitoring folder: C:\Users\Administrator\Downloads\FolderMonitor_v1.3.6\watch-folder | MaxAge=30 minutes | CheckInterval=60 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:42:54 Status OK. Folder kosong, grace period berjalan 0/30 menit
+2026/06/05 18:42:54 Startup task auto-installed. Mode= login
+2026/06/05 18:45:35 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:45:35 Monitoring folder: D:\Image\62001FS05\2026 | MaxAge=30 minutes | CheckInterval=60 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:45:35 Status OK. Folder kosong, grace period berjalan 0/30 menit
+2026/06/05 18:45:42 Remote alert failed: remote relay returned HTTP 401
+2026/06/05 18:45:42 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:46:05 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:46:05 Monitoring folder: D:\Image\62001FS05\2026 | MaxAge=30 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:46:05 Status OK. Folder kosong, grace period berjalan 0/30 menit
+2026/06/05 18:46:08 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:46:09 Monitoring folder: D:\Image\62001FS05\2026 | MaxAge=30 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:46:09 Status OK. Folder kosong, grace period berjalan 0/30 menit
+2026/06/05 18:46:31 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:46:31 Monitoring folder: D:\Image\62001FS05\2026 | MaxAge=30 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:46:31 Status OK. Folder kosong, grace period berjalan 0/30 menit
+2026/06/05 18:46:53 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:46:53 Monitoring folder: D:\Image\62001FS05\2026 | MaxAge=30 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:46:53 Status OK. Folder kosong, grace period berjalan 0/30 menit
+2026/06/05 18:47:27 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:47:27 Monitoring folder: D:\Image\62001FS05 | MaxAge=30 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:47:27 Latest file: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | LastWriteTime: 2026-06-05T18:45:30+07:00 | Age: 1.9 minutes
+2026/06/05 18:47:48 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:47:48 Monitoring folder: D:\Image\62001FS05 | MaxAge=1 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:47:48 Latest file: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | LastWriteTime: 2026-06-05T18:45:30+07:00 | Age: 2.3 minutes
+2026/06/05 18:47:48 ALERT: Tidak ada file baru/update selama 2 menit. |  | Folder: D:\Image\62001FS05 | File terakhir: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | Waktu file terakhir: 2026-06-05 18:45:30
+2026/06/05 18:47:48 Remote alert failed: remote relay returned HTTP 401
+2026/06/05 18:47:48 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:48:01 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:48:01 Monitoring folder: D:\Image\62001FS05 | MaxAge=30 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:48:01 Latest file: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | LastWriteTime: 2026-06-05T18:45:30+07:00 | Age: 2.5 minutes
+2026/06/05 18:48:56 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:48:56 Monitoring folder: D:\Image\62001FS05 | MaxAge=1 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:48:56 Latest file: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | LastWriteTime: 2026-06-05T18:45:30+07:00 | Age: 3.4 minutes
+2026/06/05 18:48:56 ALERT: Tidak ada file baru/update selama 3 menit. |  | Folder: D:\Image\62001FS05 | File terakhir: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | Waktu file terakhir: 2026-06-05 18:45:30
+2026/06/05 18:48:56 Remote alert sent: ALERT http://192.111.111.2:8765/api/alert
+2026/06/05 18:48:56 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:49:08 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:49:08 Monitoring folder: D:\Image\62001FS05 | MaxAge=1 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 18:49:08 Latest file: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | LastWriteTime: 2026-06-05T18:45:30+07:00 | Age: 3.6 minutes
+2026/06/05 18:49:08 ALERT: Tidak ada file baru/update selama 4 menit. |  | Folder: D:\Image\62001FS05 | File terakhir: D:\Image\62001FS05\2026\0605\0984\20260605184501.jpg | Waktu file terakhir: 2026-06-05 18:45:30
+2026/06/05 18:49:08 Remote alert sent: ALERT http://192.111.111.2:8765/api/alert
+2026/06/05 18:49:08 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:49:10 MaxAgeMinutes switched to 30 from GUI
+2026/06/05 18:49:32 Latest file: D:\Image\62001FS05\2026\0605\0985\20260605184842.jpg | LastWriteTime: 2026-06-05T18:49:20+07:00 | Age: 0.2 minutes
+2026/06/05 18:49:38 Latest file: D:\Image\62001FS05\2026\0605\0985\20260605184842.jpg | LastWriteTime: 2026-06-05T18:49:20+07:00 | Age: 0.3 minutes
+2026/06/05 18:49:38 RECOVERED: File baru/update terdeteksi. |  | File: D:\Image\62001FS05\2026\0605\0985\20260605184842.jpg | Waktu: 2026-06-05 18:49:20
+2026/06/05 18:49:38 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 18:52:03 Latest file: D:\Image\62001FS05\2026\0605\0986\20260605185119.jpg | LastWriteTime: 2026-06-05T18:51:53+07:00 | Age: 0.2 minutes
+2026/06/05 18:53:04 Latest file: D:\Image\62001FS05\2026\0605\0987\20260605185205.jpg | LastWriteTime: 2026-06-05T18:52:38+07:00 | Age: 0.4 minutes
+2026/06/05 18:54:04 Latest file: D:\Image\62001FS05\2026\0605\0988\20260605185313.jpg | LastWriteTime: 2026-06-05T18:53:52+07:00 | Age: 0.2 minutes
+2026/06/05 19:00:07 Latest file: D:\Image\62001FS05\2026\0605\0989\20260605185925.jpg | LastWriteTime: 2026-06-05T18:59:51+07:00 | Age: 0.3 minutes
+2026/06/05 19:00:37 Latest file: D:\Image\62001FS05\2026\0605\0990\20260605190000.jpg | LastWriteTime: 2026-06-05T19:00:33+07:00 | Age: 0.1 minutes
+2026/06/05 19:05:39 Latest file: D:\Image\62001FS05\2026\0605\0991\20260605190449.jpg | LastWriteTime: 2026-06-05T19:05:16+07:00 | Age: 0.4 minutes
+2026/06/05 19:07:54 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 19:07:54 Monitoring folder: D:\Image\62001FS05 | MaxAge=1 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/05 19:07:54 Latest file: D:\Image\62001FS05\2026\0605\0991\20260605190449.jpg | LastWriteTime: 2026-06-05T19:05:16+07:00 | Age: 2.6 minutes
+2026/06/05 19:07:54 ALERT: Tidak ada file baru/update selama 3 menit. |  | Folder: D:\Image\62001FS05 | File terakhir: D:\Image\62001FS05\2026\0605\0991\20260605190449.jpg | Waktu file terakhir: 2026-06-05 19:05:16
+2026/06/05 19:07:54 Remote alert sent: ALERT http://192.111.111.2:8765/api/alert
+2026/06/05 19:07:54 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 19:09:55 Latest file: D:\Image\62001FS05\2026\0605\0992\20260605190921.jpg | LastWriteTime: 2026-06-05T19:09:45+07:00 | Age: 0.2 minutes
+2026/06/05 19:09:55 RECOVERED: File baru/update terdeteksi. |  | File: D:\Image\62001FS05\2026\0605\0992\20260605190921.jpg | Waktu: 2026-06-05 19:09:45
+2026/06/05 19:09:55 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 19:10:18 MaxAgeMinutes switched to 30 from GUI
+2026/06/05 19:10:21 MaxAgeMinutes switched to 20 from GUI
+2026/06/05 19:11:30 Remote alert sent: TEST http://192.111.111.2:8765/api/alert
+2026/06/05 19:11:30 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
+2026/06/05 19:12:26 Latest file: D:\Image\62001FS05\2026\0605\0993\20260605191208.jpg | LastWriteTime: 2026-06-05T19:12:18+07:00 | Age: 0.1 minutes
+2026/06/05 19:13:57 Latest file: D:\Image\62001FS05\2026\0605\0994\20260605191303.jpg | LastWriteTime: 2026-06-05T19:13:39+07:00 | Age: 0.3 minutes

@@ -1,0 +1,52 @@
+{
+  "folderPath": "D:\\Image\\62001FS05",
+  "maxAgeMinutes": 20,
+  "checkIntervalSeconds": 30,
+  "repeatAlertMinutes": 5,
+  "includeSubfolders": true,
+  "scanMode": "date_folder",
+  "dateFolderPattern": "yyyy\\MMdd",
+  "scanLookbackDays": 3,
+  "allowedExtensions": [],
+  "ignoreExtensions": [
+    ".tmp",
+    ".part",
+    ".crdownload",
+    ".lock",
+    ".NUL"
+  ],
+  "ignorePrefixes": [
+    "~$"
+  ],
+  "ignoreFileNames": [
+    "CREATEDIR.NUL"
+  ],
+  "alertMode": "popup_beep",
+  "recoveryAlertMode": "popup",
+  "alertBeepMode": "duration",
+  "alertBeepDurationSeconds": 30,
+  "alertBeepFrequencyHz": 1200,
+  "alertBeepToneMilliseconds": 300,
+  "alertBeepIntervalMilliseconds": 500,
+  "alertTitle": "Folder Monitor Alert",
+  "logPath": "logs/monitor.log",
+  "taskName": "FolderMonitor",
+  "autoInstallStartupOnRun": true,
+  "startupMode": "login",
+  "alertWhenFolderMissing": true,
+  "showRecoveryNotification": true,
+  "guiEnabled": true,
+  "minimizeToTray": true,
+  "startMinimizedToTray": false,
+  "quickSwitchMaxAgeMinutes": [
+    15,
+    20,
+    30
+  ],
+  "remoteAlertEnabled": true,
+  "remoteAlertUrl": "http://192.111.111.2:8765/api/alert",
+  "remoteAlertSecret": "nuctech-sby-jaya-jaya-jaya",
+  "remoteAlertTimeoutSeconds": 3,
+  "remoteAlertSourceName": "FolderMonitor IMPORT",
+  "remoteAlertIncludeRecovery": false
+}
