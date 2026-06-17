@@ -51,7 +51,7 @@
   "remoteAlertIncludeRecovery": true,
   "sequenceFileEnabled": true,
   "sequenceFilePattern": "^\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{3}\\.jpg$",
-  "sequenceFileMinCount": 4,
+  "sequenceFileMinCount": 2,
   "sequenceFileNoNewAlertMinutes": 30,
   "sequenceFileIncompleteEnabled": true
 }

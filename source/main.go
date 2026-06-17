@@ -575,7 +575,7 @@ func runMonitor(store *ConfigStore, exeDir string, logger *log.Logger, statusCB 
 					seqAlertNoNew = true
 					if seqLastAlertNoNew.IsZero() || now.Sub(seqLastAlertNoNew) >= repeatAlert {
 						msg := fmt.Sprintf(
-							"ALERT: Tidak ada sequence group baru selama %d menit di folder.\n\nFolder: %s\nPrefix terakhir: %s\nWaktu terdeteksi terakhir: %s",
+							"ALERT: Tidak ada foto di CCR di task terbaru selama %d menit.\n\nFolder: %s\nPrefix terakhir: %s\nWaktu terdeteksi terakhir: %s",
 							cfg.SequenceFileNoNewAlertMinutes,
 							folderPath,
 							seqLastGroupPrefix,
