@@ -51,6 +51,7 @@ var (
 	procShellExecuteW    = shell32.NewProc("ShellExecuteW")
 	procGetStockObject   = gdi32.NewProc("GetStockObject")
 	procPlaySoundW       = winmm.NewProc("PlaySoundW")
+	procCreateMutexW     = kernel32.NewProc("CreateMutexW")
 )
 
 const (
@@ -1033,4 +1034,22 @@ func startupTaskExists(taskName string) (bool, error) {
 		return false, nil
 	}
 	return true, nil
+}
+
+var mutexHandle uintptr
+
+const errorAlreadyExists syscall.Errno = 183
+
+func enforceSingleInstance() {
+	mutexName := "Local\\FolderMonitorMutex_1.3.6"
+	ret, _, err := procCreateMutexW.Call(0, 0, uintptr(unsafe.Pointer(utf16Ptr(mutexName))))
+	if ret == 0 {
+		return
+	}
+	errno, ok := err.(syscall.Errno)
+	if ok && errno == errorAlreadyExists {
+		notifyInfo("FolderMonitor", "FolderMonitor sudah berjalan.")
+		os.Exit(0)
+	}
+	mutexHandle = ret
 }

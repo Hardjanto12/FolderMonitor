@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -56,6 +57,11 @@ type Config struct {
 	RemoteAlertTimeoutSeconds     int      `json:"remoteAlertTimeoutSeconds"`
 	RemoteAlertSourceName         string   `json:"remoteAlertSourceName"`
 	RemoteAlertIncludeRecovery    bool     `json:"remoteAlertIncludeRecovery"`
+	SequenceFileEnabled           bool     `json:"sequenceFileEnabled"`
+	SequenceFilePattern           string   `json:"sequenceFilePattern"`
+	SequenceFileMinCount          int      `json:"sequenceFileMinCount"`
+	SequenceFileNoNewAlertMinutes int      `json:"sequenceFileNoNewAlertMinutes"`
+	SequenceFileIncompleteEnabled bool     `json:"sequenceFileIncompleteEnabled"`
 }
 
 type MonitorState string
@@ -84,6 +90,10 @@ type MonitorSnapshot struct {
 	FileCount     int
 	LastCheck     time.Time
 	LastError     string
+	SeqLatestGroupTime  time.Time
+	SeqLatestCount      int
+	SeqAlertNoNew       bool
+	SeqAlertIncomplete  bool
 }
 
 type ConfigStore struct {
@@ -224,6 +234,8 @@ func main() {
 		go ensureStartupTaskAsync(cfg, logger)
 	}
 
+	enforceSingleInstance()
+
 	store := NewConfigStore(cfgPath, cfg)
 	if !*headless && cfg.GUIEnabled {
 		if err := runDesktopApp(store, exeDir, logger); err != nil {
@@ -275,6 +287,11 @@ func loadOrCreateConfig(path string, exeDir string) (Config, bool, error) {
 		RemoteAlertTimeoutSeconds:     3,
 		RemoteAlertSourceName:         "FolderMonitor",
 		RemoteAlertIncludeRecovery:    false,
+		SequenceFileEnabled:           false,
+		SequenceFilePattern:           `^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}\.jpg$`,
+		SequenceFileMinCount:          4,
+		SequenceFileNoNewAlertMinutes: 30,
+		SequenceFileIncompleteEnabled: true,
 	}
 
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
@@ -391,6 +408,15 @@ func applyConfigDefaults(cfg *Config) {
 	if cfg.RemoteAlertSourceName == "" {
 		cfg.RemoteAlertSourceName = "FolderMonitor"
 	}
+	if cfg.SequenceFilePattern == "" {
+		cfg.SequenceFilePattern = `^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}\.jpg$`
+	}
+	if cfg.SequenceFileMinCount <= 0 {
+		cfg.SequenceFileMinCount = 4
+	}
+	if cfg.SequenceFileNoNewAlertMinutes <= 0 {
+		cfg.SequenceFileNoNewAlertMinutes = 30
+	}
 }
 
 func ensureStringInList(list []string, value string) []string {
@@ -424,6 +450,12 @@ func runMonitor(store *ConfigStore, exeDir string, logger *log.Logger, statusCB 
 	lastLatestTime := time.Time{}
 	lastFolderPath := ""
 
+	var seqRe *regexp.Regexp
+	var seqLastNewGroupTime time.Time
+	var seqLastGroupPrefix string
+	var seqLastAlertNoNew time.Time
+	var seqLastAlertIncomplete time.Time
+
 	for {
 		if shouldStop(stop) {
 			logger.Println("Monitor stopped.")
@@ -451,6 +483,12 @@ func runMonitor(store *ConfigStore, exeDir string, logger *log.Logger, statusCB 
 			state = StateUnknown
 			lastLatestPath = ""
 			lastLatestTime = time.Time{}
+
+			// Reset sequence states
+			seqLastNewGroupTime = now
+			seqLastGroupPrefix = ""
+			seqLastAlertNoNew = time.Time{}
+			seqLastAlertIncomplete = time.Time{}
 		}
 
 		publishStatus(statusCB, MonitorSnapshot{State: state, StatusText: "Scanning folder...", FolderPath: folderPath, MaxAgeMinutes: cfg.MaxAgeMinutes, LastCheck: now})
@@ -473,6 +511,85 @@ func runMonitor(store *ConfigStore, exeDir string, logger *log.Logger, statusCB 
 			continue
 		}
 
+		// Sequence alert checking
+		var seqLatestGroupTime time.Time
+		var seqLatestCount int
+		var seqAlertNoNew bool
+		var seqAlertIncomplete bool
+
+		if cfg.SequenceFileEnabled {
+			if seqRe == nil || seqRe.String() != cfg.SequenceFilePattern {
+				re, err := regexp.Compile(cfg.SequenceFilePattern)
+				if err != nil {
+					logger.Println("Invalid SequenceFilePattern:", err)
+				} else {
+					seqRe = re
+				}
+			}
+		} else {
+			seqRe = nil
+		}
+
+		if cfg.SequenceFileEnabled && seqRe != nil {
+			seqGroups, err := scanSequenceFiles(folderPath, seqRe, cfg)
+			if err != nil {
+				logger.Println("Sequence scan error:", err)
+			} else {
+				latestGrp, hasLatest := latestSequenceGroup(seqGroups)
+				if hasLatest {
+					seqLatestGroupTime = latestGrp.LatestTime
+					seqLatestCount = latestGrp.FileCount
+
+					if latestGrp.Prefix != seqLastGroupPrefix {
+						seqLastGroupPrefix = latestGrp.Prefix
+						seqLastNewGroupTime = now
+					}
+
+					// Check if incomplete
+					if latestGrp.FileCount < cfg.SequenceFileMinCount {
+						if now.Sub(latestGrp.LatestTime) >= checkInterval {
+							seqAlertIncomplete = true
+							if seqLastAlertIncomplete.IsZero() || now.Sub(seqLastAlertIncomplete) >= repeatAlert {
+								msg := fmt.Sprintf(
+									"ALERT: Sequence group tidak lengkap (%d/%d file).\n\nFolder: %s\nPrefix: %s\nWaktu terupdate: %s",
+									latestGrp.FileCount,
+									cfg.SequenceFileMinCount,
+									folderPath,
+									latestGrp.Prefix,
+									latestGrp.LatestTime.Format("2006-01-02 15:04:05"),
+								)
+								logger.Println(strings.ReplaceAll(msg, "\n", " | "))
+								sendRemoteAlertAsync(cfg, logger, "ALERT", msg, folderPath, "", time.Time{})
+								alertUser(cfg, cfg.AlertTitle, msg, cfg.AlertMode)
+								seqLastAlertIncomplete = now
+							}
+						}
+					} else {
+						// reset automatically when complete again
+						seqLastAlertIncomplete = time.Time{}
+					}
+				}
+
+				// Check if no new group
+				if now.Sub(seqLastNewGroupTime) >= time.Duration(cfg.SequenceFileNoNewAlertMinutes)*time.Minute {
+					seqAlertNoNew = true
+					if seqLastAlertNoNew.IsZero() || now.Sub(seqLastAlertNoNew) >= repeatAlert {
+						msg := fmt.Sprintf(
+							"ALERT: Tidak ada sequence group baru selama %d menit di folder.\n\nFolder: %s\nPrefix terakhir: %s\nWaktu terdeteksi terakhir: %s",
+							cfg.SequenceFileNoNewAlertMinutes,
+							folderPath,
+							seqLastGroupPrefix,
+							seqLastNewGroupTime.Format("2006-01-02 15:04:05"),
+						)
+						logger.Println(strings.ReplaceAll(msg, "\n", " | "))
+						sendRemoteAlertAsync(cfg, logger, "ALERT", msg, folderPath, "", time.Time{})
+						alertUser(cfg, cfg.AlertTitle, msg, cfg.AlertMode)
+						seqLastAlertNoNew = now
+					}
+				}
+			}
+		}
+
 		if result.FileCount == 0 {
 			age := now.Sub(emptySince)
 			statusText := fmt.Sprintf("Folder kosong, grace period %.0f/%.0f menit", age.Minutes(), maxAge.Minutes())
@@ -490,7 +607,18 @@ func runMonitor(store *ConfigStore, exeDir string, logger *log.Logger, statusCB 
 				logger.Printf("Status OK. Folder kosong, grace period berjalan %.0f/%.0f menit", age.Minutes(), maxAge.Minutes())
 				state = StateOK
 			}
-			publishStatus(statusCB, MonitorSnapshot{State: state, StatusText: statusText, FolderPath: folderPath, MaxAgeMinutes: cfg.MaxAgeMinutes, FileCount: 0, LastCheck: now})
+			publishStatus(statusCB, MonitorSnapshot{
+				State:              state,
+				StatusText:         statusText,
+				FolderPath:         folderPath,
+				MaxAgeMinutes:      cfg.MaxAgeMinutes,
+				FileCount:          0,
+				LastCheck:          now,
+				SeqLatestGroupTime: seqLatestGroupTime,
+				SeqLatestCount:      seqLatestCount,
+				SeqAlertNoNew:       seqAlertNoNew,
+				SeqAlertIncomplete:  seqAlertIncomplete,
+			})
 			if sleepOrStop(checkInterval, stop) {
 				return
 			}
@@ -539,7 +667,21 @@ func runMonitor(store *ConfigStore, exeDir string, logger *log.Logger, statusCB 
 			state = StateOK
 		}
 
-		publishStatus(statusCB, MonitorSnapshot{State: state, StatusText: statusText, FolderPath: folderPath, MaxAgeMinutes: cfg.MaxAgeMinutes, LatestPath: result.LatestPath, LatestTime: result.LatestTime, LatestAge: latestAge, FileCount: result.FileCount, LastCheck: now})
+		publishStatus(statusCB, MonitorSnapshot{
+			State:              state,
+			StatusText:         statusText,
+			FolderPath:         folderPath,
+			MaxAgeMinutes:      cfg.MaxAgeMinutes,
+			LatestPath:         result.LatestPath,
+			LatestTime:         result.LatestTime,
+			LatestAge:          latestAge,
+			FileCount:          result.FileCount,
+			LastCheck:          now,
+			SeqLatestGroupTime: seqLatestGroupTime,
+			SeqLatestCount:      seqLatestCount,
+			SeqAlertNoNew:       seqAlertNoNew,
+			SeqAlertIncomplete:  seqAlertIncomplete,
+		})
 
 		if sleepOrStop(checkInterval, stop) {
 			return
@@ -907,4 +1049,100 @@ func normalizeBeepMode(mode string) string {
 	default:
 		return "until_confirmed"
 	}
+}
+
+type SequenceGroup struct {
+	Prefix     string
+	FileCount  int
+	LatestTime time.Time
+}
+
+func scanSequenceFiles(folderPath string, seqRe *regexp.Regexp, cfg Config) ([]SequenceGroup, error) {
+	groupsMap := make(map[string]*SequenceGroup)
+
+	checkFile := func(path string, d fs.DirEntry) error {
+		if d.IsDir() {
+			return nil
+		}
+		name := d.Name()
+		if shouldIgnoreFile(name, cfg) {
+			return nil
+		}
+		if !seqRe.MatchString(name) {
+			return nil
+		}
+		info, err := d.Info()
+		if err != nil {
+			return nil
+		}
+		modTime := info.ModTime()
+
+		lastDash := strings.LastIndex(name, "-")
+		if lastDash == -1 {
+			return nil
+		}
+		prefix := name[:lastDash]
+
+		g, exists := groupsMap[prefix]
+		if !exists {
+			g = &SequenceGroup{Prefix: prefix}
+			groupsMap[prefix] = g
+		}
+		g.FileCount++
+		if g.LatestTime.IsZero() || modTime.After(g.LatestTime) {
+			g.LatestTime = modTime
+		}
+		return nil
+	}
+
+	scanDir := func(dir string, recursive bool) error {
+		if recursive {
+			return filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+				if err != nil {
+					return nil
+				}
+				return checkFile(path, d)
+			})
+		}
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			return err
+		}
+		for _, entry := range entries {
+			_ = checkFile(filepath.Join(dir, entry.Name()), entry)
+		}
+		return nil
+	}
+
+	if strings.EqualFold(cfg.ScanMode, "date_folder") {
+		folders := buildDateFolders(folderPath, cfg)
+		for _, target := range folders {
+			info, err := os.Stat(target)
+			if err != nil || !info.IsDir() {
+				continue
+			}
+			_ = scanDir(target, true)
+		}
+	} else {
+		_ = scanDir(folderPath, cfg.IncludeSubfolders)
+	}
+
+	var groups []SequenceGroup
+	for _, g := range groupsMap {
+		groups = append(groups, *g)
+	}
+	return groups, nil
+}
+
+func latestSequenceGroup(groups []SequenceGroup) (SequenceGroup, bool) {
+	if len(groups) == 0 {
+		return SequenceGroup{}, false
+	}
+	latest := groups[0]
+	for _, g := range groups[1:] {
+		if g.LatestTime.After(latest.LatestTime) {
+			latest = g
+		}
+	}
+	return latest, true
 }

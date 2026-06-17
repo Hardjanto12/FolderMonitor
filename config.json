@@ -48,5 +48,10 @@
   "remoteAlertSecret": "nuctech-sby-jaya-jaya-jaya",
   "remoteAlertTimeoutSeconds": 3,
   "remoteAlertSourceName": "FolderMonitor IMPORT",
-  "remoteAlertIncludeRecovery": false
+  "remoteAlertIncludeRecovery": false,
+  "sequenceFileEnabled": true,
+  "sequenceFilePattern": "^\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{3}\\.jpg$",
+  "sequenceFileMinCount": 4,
+  "sequenceFileNoNewAlertMinutes": 30,
+  "sequenceFileIncompleteEnabled": true
 }

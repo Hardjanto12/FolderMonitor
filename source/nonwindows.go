@@ -39,3 +39,5 @@ func uninstallStartupTask(taskName string) error {
 func startupTaskExists(taskName string) (bool, error) {
 	return false, nil
 }
+
+func enforceSingleInstance() {}

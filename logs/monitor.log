@@ -70,3 +70,15 @@
 2026/06/05 19:11:30 FolderMonitor v1.3.6 started. Config=C:\FolderMonitor_v1.3.6\config.json
 2026/06/05 19:12:26 Latest file: D:\Image\62001FS05\2026\0605\0993\20260605191208.jpg | LastWriteTime: 2026-06-05T19:12:18+07:00 | Age: 0.1 minutes
 2026/06/05 19:13:57 Latest file: D:\Image\62001FS05\2026\0605\0994\20260605191303.jpg | LastWriteTime: 2026-06-05T19:13:39+07:00 | Age: 0.3 minutes
+2026/06/17 16:52:29 FolderMonitor v1.3.6 started. Config=D:\Source Codes\Nuctech\FolderMonitor_v1.3.6\config.json
+2026/06/17 16:52:29 Monitoring folder: D:\Image\62001FS05 | MaxAge=20 minutes | CheckInterval=30 seconds | ScanMode=date_folder | LookbackDays=3
+2026/06/17 16:52:29 Scan error: GetFileAttributesEx D:\Image\62001FS05: The system cannot find the path specified.
+2026/06/17 16:52:29 ALERT: Folder tidak bisa dibaca. |  | Folder: D:\Image\62001FS05 | Error: GetFileAttributesEx D:\Image\62001FS05: The system cannot find the path specified.
+2026/06/17 16:52:29 FolderMonitor v1.3.6 started. Config=D:\Source Codes\Nuctech\FolderMonitor_v1.3.6\config.json
+2026/06/17 16:52:29 Auto install startup failed: schtasks error: exit status 1 | output: ERROR: Access is denied.
+
+2026/06/17 16:52:32 Remote alert failed: Post "http://192.111.111.2:8765/api/alert": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+2026/06/17 16:52:59 Scan error: GetFileAttributesEx D:\Image\62001FS05: The system cannot find the path specified.
+2026/06/17 16:53:07 FolderMonitor v1.3.6 started. Config=D:\Source Codes\Nuctech\FolderMonitor_v1.3.6\config.json
+2026/06/17 16:53:07 Auto install startup failed: schtasks error: exit status 1 | output: ERROR: Access is denied.
+
